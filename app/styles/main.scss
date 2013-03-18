@@ -1,0 +1,45 @@
+@import "_reset.scss";
+
+html { 
+	height: 100%;
+}
+body { 
+	height: 100%; 
+	margin: 0; 
+	padding: 0 
+}
+#map_canvas { 
+	height: 100%; 
+	width: 100%; 
+	border: 1px solid red; 
+	position: absolute; 
+	top: 0; 
+	left: 0; 
+}
+.information { 
+	background-color: #fff; 
+	width: 300px; 
+	height: 300px; 
+	position: absolute;
+	bottom: 0; 
+	left: 0; 
+	z-index: 10;
+
+	.js-localtime { 
+		display: none; 
+	}
+}
+
+#messages { 
+	background: #fff;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 380px;
+	height: 300px;
+	z-index: 10;
+	div {
+		position: absolute; 
+		display:none;
+	}
+}

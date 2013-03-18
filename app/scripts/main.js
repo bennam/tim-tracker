@@ -1,5 +1,8 @@
 // TODO:
 // Markers - custom animations
+// Latest tweets
+// Style
+// Testing
 
 var app =  app || {};
 
@@ -14,39 +17,35 @@ var app =  app || {};
     currentPositionMarker: null,
     locations: [],
     hourInterval: null,
+    messageInterval: null,
     spotUrl: 'https://api.findmespot.com/spot-main-web/consumer/rest-api/2.0/public/feed/0JQ8uiQGUq96qSapP3CixZnP00iH66CDb/',
     justGivingUrl: 'http://api.jo.je/justgiving/jsonp.php?d=TimWoodcockMdS&callback=?',
 
     init: function () {
 
       this.loadMap();
+      this.getJustGivingInformation();
       this.updatePosition(300000);
       
     },
-
-// http://api.justgiving.com:82/c00781b0/v1/fundraising/TimWoodcockMdS
-// c00781b0/v1/account/feed
-    
 
     latestTweet: function () {
 
     },
 
-    latestDonationMessage: function () {
+    getJustGivingInformation: function () {
 
-    },
-
-    totalRaised: function () {
+      var that = this;
 
       $.ajax({
         type: 'GET',
         url: this.justGivingUrl,
-        dataType: "json",
+        dataType: "jsonp",
 
         success: function(json) {
-
-          console.log(json);
-
+            that.showTotalDonationAmount(json.donations_total);
+            that.showDonationMessages(json)
+            console.log(JSON.stringify(json))
         },
 
         error: function (xhr, err) {  
@@ -58,15 +57,65 @@ var app =  app || {};
 
     },
 
+    showTotalDonationAmount: function (data) {
+
+      $('.js-amount').html('<p>Total amount raised:' + this.roundNumberWithCommas(data) + '</p>');
+
+    },
+
+    showDonationMessages: function (data) {
+
+      clearInterval(this.messageInterval);
+      $('#messages').html('')
+
+      $.each(data.donations, function (i, item) {
+
+        if ( (item.person !== '') && (item.message !== '') ) {
+          $('#messages').append('<div><p>"' + item.message + '"</p><p>' + item.person + '</p></div>');
+        }
+
+      });
+
+      this.donationMessageAnimation();
+
+    },
+
+    donationMessageAnimation: function () {
+
+      var aniSpd = 5000;
+      var fadeSpd = 1000;
+      var startIndex = 0;
+      var endIndex = $('#messages div').length;
+      
+      $('#messages div:first').fadeIn(fadeSpd);
+
+      this.messageInterval = window.setInterval(function() {
+
+        $('#messages div:eq(' + startIndex + ')').fadeOut(fadeSpd);
+        startIndex++;
+        $('#messages div:eq(' + startIndex + ')').delay(fadeSpd).fadeIn(fadeSpd);
+
+        if (startIndex === endIndex) {
+          $('#messages div:eq(0)').delay(fadeSpd).fadeIn(fadeSpd);
+          startIndex = 0;
+        }
+
+      }, aniSpd);
+
+    },
+
+    roundNumberWithCommas: function (num) {
+
+      var number = Math.round(parseInt(num, 10)).toString();
+      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    },
+
     getLocalTime: function () {
 
       var curLatLong = String(this.currentPositionMarker.getPosition()).replace(/[() ]/g, ''),
           ts = Math.round((new Date()).getTime() / 1000),
           that = this;   
-
-      // var curLatLong = '42.032974,-76.113281',
-      //     ts = Math.round((new Date()).getTime() / 1000),
-      //     that = this;   
 
       $.ajax({
         type: "GET",
