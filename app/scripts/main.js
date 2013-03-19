@@ -19,33 +19,53 @@ var app =  app || {};
     hourInterval: null,
     messageInterval: null,
     spotUrl: 'https://api.findmespot.com/spot-main-web/consumer/rest-api/2.0/public/feed/0JQ8uiQGUq96qSapP3CixZnP00iH66CDb/',
-    justGivingUrl: 'http://api.jo.je/justgiving/jsonp.php?d=TimWoodcockMdS&callback=?',
 
     init: function () {
 
       this.loadMap();
       this.getJustGivingInformation();
       this.updatePosition(300000);
+      this.latestTweet();
       
     },
 
     latestTweet: function () {
 
+    // set your twitter id
+    var user = 'HAVASLYNXEU';
+      
+    // using jquery built in get json method with twitter api, return only one result
+    $.getJSON('https://api.twitter.com/1/statuses/user_timeline/' + user + '.json?count=1&include_rts=1&callback=?', function(data)      {
+          
+        // result returned
+        var tweet = data[0].text;
+      
+        // process links and reply
+        tweet = tweet.replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, function(url) {
+            return '<a href="'+url+'">'+url+'</a>';
+        }).replace(/B@([A-Za-z0-9_]+)/ig, function(reply) {
+            return  reply.charAt(0)+'<a href="http://twitter.com/'+reply.substring(1)+'">'+reply.substring(1)+'</a>';
+        });
+      
+        // output the result
+        $("#twitter").html(tweet);
+    }); 
+
     },
 
     getJustGivingInformation: function () {
 
-      var that = this;
+      var that = this,
+          url = 'http://api.jo.je/justgiving/jsonp.php?d=TimWoodcockMdS&callback=?';
 
       $.ajax({
         type: 'GET',
-        url: this.justGivingUrl,
+        url: url,
         dataType: "jsonp",
 
         success: function(json) {
             that.showTotalDonationAmount(json.donations_total);
-            that.showDonationMessages(json)
-            console.log(JSON.stringify(json))
+            that.showDonationMessages(json);
         },
 
         error: function (xhr, err) {  
@@ -66,7 +86,12 @@ var app =  app || {};
     showDonationMessages: function (data) {
 
       clearInterval(this.messageInterval);
-      $('#messages').html('')
+
+      var fadeSpd = 1000;
+
+      $('#messages').fadeOut(fadeSpd, function() {
+        $(this).html('');
+      });
 
       $.each(data.donations, function (i, item) {
 
@@ -82,10 +107,10 @@ var app =  app || {};
 
     donationMessageAnimation: function () {
 
-      var aniSpd = 5000;
-      var fadeSpd = 1000;
-      var startIndex = 0;
-      var endIndex = $('#messages div').length;
+      var aniSpd = 5000,
+          fadeSpd = 1000,
+          startIndex = 0,
+          endIndex = $('#messages div').length;
       
       $('#messages div:first').fadeIn(fadeSpd);
 
@@ -115,11 +140,12 @@ var app =  app || {};
 
       var curLatLong = String(this.currentPositionMarker.getPosition()).replace(/[() ]/g, ''),
           ts = Math.round((new Date()).getTime() / 1000),
-          that = this;   
+          that = this,
+          url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + curLatLong + '&timestamp=' + ts + '&sensor=false';   
 
       $.ajax({
         type: "GET",
-        url: 'https://maps.googleapis.com/maps/api/timezone/json?location=' + curLatLong + '&timestamp=' + ts + '&sensor=false',
+        url: url,
         dataType: "json",
 
         success: function(json) {
