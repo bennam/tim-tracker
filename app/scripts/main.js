@@ -87,11 +87,7 @@ var app =  app || {};
 
       clearInterval(this.messageInterval);
 
-      var fadeSpd = 1000;
-
-      $('#messages').fadeOut(fadeSpd, function() {
-        $(this).html('');
-      });
+      $('#messages').html('');
 
       $.each(data.donations, function (i, item) {
 
@@ -196,8 +192,18 @@ var app =  app || {};
     loadMap: function () {
 
       var mapOptions = {
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        zoom: 13,
+        mapTypeId: google.maps.MapTypeId.TERRAIN,
+        panControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_TOP
+        },
+        mapTypeControlOptions: {
+            position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        zoomControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_TOP
+        },
+        streetViewControl: false
       };
 
       this.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
