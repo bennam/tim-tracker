@@ -31,25 +31,13 @@ var app =  app || {};
 
     latestTweet: function () {
 
-    // set your twitter id
-    var user = 'HAVASLYNXEU';
-      
-    // using jquery built in get json method with twitter api, return only one result
-    $.getJSON('https://api.twitter.com/1/statuses/user_timeline/' + user + '.json?count=1&include_rts=1&callback=?', function(data)      {
-          
-        // result returned
-        var tweet = data[0].text;
-      
-        // process links and reply
-        tweet = tweet.replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, function(url) {
-            return '<a href="'+url+'">'+url+'</a>';
-        }).replace(/B@([A-Za-z0-9_]+)/ig, function(reply) {
-            return  reply.charAt(0)+'<a href="http://twitter.com/'+reply.substring(1)+'">'+reply.substring(1)+'</a>';
-        });
-      
-        // output the result
-        $("#twitter").html(tweet);
-    }); 
+      $("#twitter").tweet({
+        avatar_size: 32,
+        count: 1,
+        query: "High5ives HAVASLYNXEU",
+        loading_text: "searching twitter...",
+        template: "{avatar}{text}{join} {time}"
+      });
 
     },
 
