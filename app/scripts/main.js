@@ -18,6 +18,7 @@ var app =  app || {};
     locations: [],
     hourInterval: null,
     messageInterval: null,
+    overlay: null,
     spotUrl: 'https://api.findmespot.com/spot-main-web/consumer/rest-api/2.0/public/feed/0JQ8uiQGUq96qSapP3CixZnP00iH66CDb/',
 
     init: function () {
@@ -266,13 +267,18 @@ var app =  app || {};
               that.locations.push(new google.maps.LatLng(item.latitude, item.longitude));
           });
 
-          that.drawPath(that.locations, '#FF0000');
+          that.drawPath(that.locations, '#dc002e');
           that.map.setCenter(that.locations[0]);
 
-          that.currentPositionMarker = new google.maps.Marker({
-            position: that.locations[0],
-            map: that.map
-          });
+          // that.currentPositionMarker = new google.maps.Marker({
+          //   position: that.locations[0],
+          //   map: that.map
+          // });
+
+          // console.log(that.locations[0])
+
+
+          that.addMarkerAnimation(that.locations[0]);
 
           that.getLocalTime();
 
@@ -281,6 +287,95 @@ var app =  app || {};
         }
 
       });
+
+    },
+
+    addMarkerAnimation: function (latLng) {
+
+      // todo: remove overlay if exists
+
+      // app.global.overlay.onRemove(app.global.overlay)
+
+      USGSOverlay.prototype = new google.maps.OverlayView();
+
+      var bounds = latLng;
+
+      this.overlay = new USGSOverlay(bounds, this.map);
+
+      function USGSOverlay(bounds, map) {
+
+        // Now initialize all properties.
+        this.bounds_ = bounds;
+        this.map_ = map;
+
+        // We define a property to hold the image's div. We'll
+        // actually create this div upon receipt of the onAdd()
+        // method so we'll leave it null for now.
+        this.div_ = null;
+
+        // Explicitly call setMap on this overlay
+        this.setMap(map);
+      }
+
+      USGSOverlay.prototype.onAdd = function() {
+
+        // Note: an overlay's receipt of onAdd() indicates that
+        // the map's panes are now available for attaching
+        // the overlay to the map via the DOM.
+
+        // Create the DIV and set some basic attributes.
+        var div = document.createElement('div');
+
+        div.setAttribute("class", "marker");
+
+        $(div).html('<div class="marker-glow"></div><div class="marker-shape"></div>');
+
+        //div.style.position = 'absolute';
+
+        // Set the overlay's div_ property to this DIV
+        this.div_ = div;
+
+        // We add an overlay to a map via one of the map's panes.
+        // We'll add this overlay to the overlayLayer pane.
+        var panes = this.getPanes();
+        panes.overlayLayer.appendChild(div);
+      }
+
+      USGSOverlay.prototype.draw = function() {
+
+        // Size and position the overlay. We use a southwest and northeast
+        // position of the overlay to peg it to the correct position and size.
+        // We need to retrieve the projection from this overlay to do this.
+        var overlayProjection = this.getProjection();
+
+        // Retrieve the southwest and northeast coordinates of this overlay
+        // in latlngs and convert them to pixels coordinates.
+        // We'll use these coordinates to resize the DIV.
+
+        // alert(this.bounds_)
+
+
+        var myLatLng = new google.maps.LatLng(100, -150.287132);
+
+        var sw = overlayProjection.fromLatLngToDivPixel(this.bounds_);
+
+        console.log(this.bounds_)
+
+
+        // alert(sw)
+        // Resize the image's DIV to fit the indicated dimensions.
+        var div = this.div_;
+        div.style.left = (sw.x - 20) + 'px';
+        div.style.top = (sw.y - 20) + 'px';
+        // div.style.width = (ne.x - sw.x) + 'px';
+        // div.style.height = (sw.y - ne.y) + 'px';
+      }
+
+      USGSOverlay.prototype.onRemove = function() {
+        this.div_.parentNode.removeChild(this.div_);
+        this.div_ = null;
+      }
+      
 
     },
 
