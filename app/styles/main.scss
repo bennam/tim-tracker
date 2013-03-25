@@ -58,11 +58,11 @@ body {
 
 	.marker-shape {
 		position: absolute;
-		top: 10px;
-		left: 10px;
-		width: 20px;
-		height: 20px;
-		@include border-radius(20px);
+		top: 12px;
+		left: 12px;
+		width: 16px;
+		height: 16px;
+		@include border-radius(8px);
 		background: $marker-color;
 	}
 

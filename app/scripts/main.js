@@ -1,8 +1,10 @@
 // TODO:
 // Markers - custom animations
-// Latest tweets
+// Latest tweets - fix bug
 // Style
 // Testing
+// Update twitter feed every 5 mins
+// update just giving messages
 
 var app =  app || {};
 
@@ -25,20 +27,46 @@ var app =  app || {};
 
       this.loadMap();
       this.getJustGivingInformation();
-      this.updatePosition(300000);
       this.latestTweet();
+
+      // Interval of 300000 = 5 mins.
+      this.updateAll(300000);
       
     },
 
     latestTweet: function () {
 
-      $("#twitter").tweet({
-        avatar_size: 32,
-        count: 1,
-        query: "High5ives HAVASLYNXEU",
-        loading_text: "searching twitter...",
-        template: "{avatar}{text}{join} {time}"
+      jQuery(function($){
+        // $("#twitter").tweet({
+        //   join_text: "auto",
+        //   username: "seaofclouds",
+        //   avatar_size: 48,
+        //   count: 3,
+        //   auto_join_text_default: " we said, ",
+        //   auto_join_text_ed: " we ",
+        //   auto_join_text_ing: " we were ",
+        //   auto_join_text_reply: " we replied ",
+        //   auto_join_text_url: " we were checking out ",
+        //   loading_text: "loading tweets..."
+        // });
+
+        $("#twitter").tweet({
+          avatar_size: 32,
+          count: 1,
+          username: "seaofclouds",
+          loading_text: "searching twitter...",
+          template: "{avatar}{text}{join} {time}"
+        });
+
       });
+
+      // $("#twitter").tweet({
+      //   avatar_size: 32,
+      //   count: 1,
+      //   query: "High5ives HAVASLYNXEU",
+      //   loading_text: "searching twitter...",
+      //   template: "{avatar}{text}{join} {time}"
+      // });
 
     },
 
@@ -121,12 +149,11 @@ var app =  app || {};
 
     },
 
-    getLocalTime: function () {
+    getLocalTime: function (latLng) {
 
-      var curLatLong = String(this.currentPositionMarker.getPosition()).replace(/[() ]/g, ''),
-          ts = Math.round((new Date()).getTime() / 1000),
+      var ts = Math.round((new Date()).getTime() / 1000),
           that = this,
-          url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + curLatLong + '&timestamp=' + ts + '&sensor=false';   
+          url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latLng.lat() + ',' + latLng.lng() + '&timestamp=' + ts + '&sensor=false';   
 
       $.ajax({
         type: "GET",
@@ -181,7 +208,7 @@ var app =  app || {};
     loadMap: function () {
 
       var mapOptions = {
-        zoom: 13,
+        zoom: 19,
         mapTypeId: google.maps.MapTypeId.TERRAIN,
         panControlOptions: {
             position: google.maps.ControlPosition.RIGHT_TOP
@@ -200,57 +227,7 @@ var app =  app || {};
 
     },
 
-    updatePosition: function (interval) {
 
-      var that = this;
-
-      setInterval( function() {
-
-        $.ajax({
-          type: 'GET',
-          url: that.spotUrl + 'latest.json',
-          dataType: 'jsonp',
-
-          success: function(json) {
-            var newLocation = [];
-            $.each(json.response.feedMessageResponse.messages, function (i, item) {
-              newLocation.push(new google.maps.LatLng(item.latitude, item.longitude));
-            });
-            that.updateMap(newLocation[0]);
-            console.log('Position updated');
-          },
-
-          error: function (xhr, err) {  
-            console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);  
-            console.log("responseText: " + xhr.responseText);  
-          }
-        });
-
-      }, interval);
-
-    },
-
-    updateMap: function (latLng) {
-
-      var that = this;
-
-      this.locations.unshift(latLng);
-
-      this.drawPath(this.locations, '#FF0000');
-      this.currentPositionMarker.setAnimation(google.maps.Animation.BOUNCE);
-
-      setTimeout(function(){ 
-        that.currentPositionMarker.setAnimation(null); 
-      }, 2000);
-
-      this.currentPositionMarker.setPosition(latLng);
-      this.map.panTo(latLng);
-
-      $(".js-totaldistance").html(this.getTotalDistance(this.route));
-      clearInterval(this.hourInterval);
-      this.getLocalTime();
-
-    },
 
     getLocations: function () {
 
@@ -269,18 +246,8 @@ var app =  app || {};
 
           that.drawPath(that.locations, '#dc002e');
           that.map.setCenter(that.locations[0]);
-
-          // that.currentPositionMarker = new google.maps.Marker({
-          //   position: that.locations[0],
-          //   map: that.map
-          // });
-
-          // console.log(that.locations[0])
-
-
           that.addMarkerAnimation(that.locations[0]);
-
-          that.getLocalTime();
+          that.getLocalTime(that.locations[0]);
 
           $(".js-totaldistance").html(that.getTotalDistance(that.route));
 
@@ -292,83 +259,51 @@ var app =  app || {};
 
     addMarkerAnimation: function (latLng) {
 
-      // todo: remove overlay if exists
-
-      // app.global.overlay.onRemove(app.global.overlay)
-
       USGSOverlay.prototype = new google.maps.OverlayView();
 
       var bounds = latLng;
+      var html = '<div class="marker-glow"></div><div class="marker-shape"></div>';
 
-      this.overlay = new USGSOverlay(bounds, this.map);
+      this.overlay = new USGSOverlay(bounds, this.map, html);
 
-      function USGSOverlay(bounds, map) {
+      function USGSOverlay(bounds, map, html) {
 
-        // Now initialize all properties.
         this.bounds_ = bounds;
         this.map_ = map;
-
-        // We define a property to hold the image's div. We'll
-        // actually create this div upon receipt of the onAdd()
-        // method so we'll leave it null for now.
+        this.html_ = html;
         this.div_ = null;
-
-        // Explicitly call setMap on this overlay
         this.setMap(map);
+
       }
 
       USGSOverlay.prototype.onAdd = function() {
 
-        // Note: an overlay's receipt of onAdd() indicates that
-        // the map's panes are now available for attaching
-        // the overlay to the map via the DOM.
-
-        // Create the DIV and set some basic attributes.
         var div = document.createElement('div');
 
         div.setAttribute("class", "marker");
 
-        $(div).html('<div class="marker-glow"></div><div class="marker-shape"></div>');
+        $(div).html(this.html_);
 
-        //div.style.position = 'absolute';
-
-        // Set the overlay's div_ property to this DIV
         this.div_ = div;
 
-        // We add an overlay to a map via one of the map's panes.
-        // We'll add this overlay to the overlayLayer pane.
         var panes = this.getPanes();
         panes.overlayLayer.appendChild(div);
+
       }
 
       USGSOverlay.prototype.draw = function() {
 
-        // Size and position the overlay. We use a southwest and northeast
-        // position of the overlay to peg it to the correct position and size.
-        // We need to retrieve the projection from this overlay to do this.
         var overlayProjection = this.getProjection();
 
-        // Retrieve the southwest and northeast coordinates of this overlay
-        // in latlngs and convert them to pixels coordinates.
-        // We'll use these coordinates to resize the DIV.
+        var pos = overlayProjection.fromLatLngToDivPixel(this.bounds_);
 
-        // alert(this.bounds_)
-
-
-        var myLatLng = new google.maps.LatLng(100, -150.287132);
-
-        var sw = overlayProjection.fromLatLngToDivPixel(this.bounds_);
-
-        console.log(this.bounds_)
-
-
-        // alert(sw)
-        // Resize the image's DIV to fit the indicated dimensions.
         var div = this.div_;
-        div.style.left = (sw.x - 20) + 'px';
-        div.style.top = (sw.y - 20) + 'px';
-        // div.style.width = (ne.x - sw.x) + 'px';
-        // div.style.height = (sw.y - ne.y) + 'px';
+
+        if (div !== null) {
+          div.style.left = (pos.x - 20) + 'px';
+          div.style.top = (pos.y - 20) + 'px';
+        }
+
       }
 
       USGSOverlay.prototype.onRemove = function() {
@@ -415,6 +350,69 @@ var app =  app || {};
 
      // Convert result to miles from km.
      return Math.round(path.inKm() * 0.6214);
+
+    },
+
+    updateAll: function (interval) {
+
+      var that = this;
+
+      setInterval( function() {
+
+        // Update Justgiving information.
+        that.getJustGivingInformation();
+        // Update Twitter feed.
+
+        // Update map.
+        $.ajax({
+          type: 'GET',
+          url: that.spotUrl + 'latest.json',
+          dataType: 'jsonp',
+
+          success: function(json) {
+            var newLocation = [];
+            $.each(json.response.feedMessageResponse.messages, function (i, item) {
+              newLocation.push(new google.maps.LatLng(item.latitude, item.longitude));
+            });
+            that.updateMap(newLocation[0]);
+            console.log('Position updated');
+          },
+
+          error: function (xhr, err) {  
+            console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);  
+            console.log("responseText: " + xhr.responseText);  
+          }
+        });
+
+
+
+      }, interval);
+
+    },
+
+    updateMap: function (latLng) {
+
+      var that = this;
+
+      this.locations.unshift(latLng);
+
+      this.drawPath(this.locations, '#FF0000');
+
+      // Remove overlay if exists.
+      if (this.overlay !== null) {
+        this.overlay.onRemove(app.global.overlay)
+      }
+
+      // Update marker animation.
+      this.addMarkerAnimation(latLng);
+      this.map.panTo(latLng);
+
+      // Update total distance.
+      $(".js-totaldistance").html(this.getTotalDistance(this.route));
+
+      // Update clock.
+      clearInterval(this.hourInterval);
+      this.getLocalTime(latLng);
 
     }
 
