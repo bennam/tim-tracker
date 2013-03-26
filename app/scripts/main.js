@@ -1,11 +1,3 @@
-// TODO:
-// Markers - custom animations
-// Latest tweets - fix bug
-// Style
-// Testing
-// Update twitter feed every 5 mins
-// update just giving messages
-
 var app =  app || {};
 
 (function () {
@@ -31,9 +23,25 @@ var app =  app || {};
 
       // Interval of 300000 = 5 mins.
       this.updateAll(300000);
+
+      this.toggleSidebar();
       
     },
 
+    toggleSidebar: function () {
+
+      $("#js-close").on("click", function(e){
+        e.preventDefault();
+        $('.sidebar').animate({"left": "-200"}, "800");
+      }); 
+      $("#js-open").on("click", function(e){
+        e.preventDefault();
+        $('.sidebar').animate({"left": "0"}, "800");
+      }); 
+
+    },
+
+    // TODO: Get latest twitter feed.
     latestTweet: function () {
 
       jQuery(function($){
@@ -96,7 +104,7 @@ var app =  app || {};
 
     showTotalDonationAmount: function (data) {
 
-      $('.js-amount').html('<p>Total amount raised:' + this.roundNumberWithCommas(data) + '</p>');
+      $('.js-amount').html('£' + this.roundNumberWithCommas(data));
 
     },
 
@@ -109,7 +117,7 @@ var app =  app || {};
       $.each(data.donations, function (i, item) {
 
         if ( (item.person !== '') && (item.message !== '') ) {
-          $('#messages').append('<div><p>"' + item.message + '"</p><p>' + item.person + '</p></div>');
+          $('#messages').append('<div><blockquote><span>' + item.message + '</span></blockquote><p class="person">' + item.person + '</p></div>');
         }
 
       });
@@ -200,8 +208,9 @@ var app =  app || {};
       },1000);
 
       setTimeout(function() {
-        $(".js-localtime").show();
-      }, 1000);
+        $(".js-localtime-loading").hide();
+        $(".js-localtime").css('display', 'block')
+      }, 1010);
 
     },
 
@@ -244,12 +253,11 @@ var app =  app || {};
               that.locations.push(new google.maps.LatLng(item.latitude, item.longitude));
           });
 
-          that.drawPath(that.locations, '#dc002e');
+          that.drawPath(that.locations, '#ed1a3a');
           that.map.setCenter(that.locations[0]);
           that.addMarkerAnimation(that.locations[0]);
           that.getLocalTime(that.locations[0]);
-
-          $(".js-totaldistance").html(that.getTotalDistance(that.route));
+          that.showTotalDistance(that.route);
 
         }
 
@@ -330,6 +338,16 @@ var app =  app || {};
 
     },
 
+    showTotalDistance : function (path) {
+
+      var km = this.getTotalDistance(path);
+      var miles = Math.round(km * 0.6214);
+      var html = miles + 'mi<span class="seperator">/</span>' + km + 'km';
+
+      $('.js-total-distance').html(html);
+
+    },
+
     getTotalDistance: function (path) {
 
       google.maps.LatLng.prototype.kmTo = function(a){ 
@@ -348,8 +366,7 @@ var app =  app || {};
         return dist; 
       }
 
-     // Convert result to miles from km.
-     return Math.round(path.inKm() * 0.6214);
+     return Math.round(path.inKm());
 
     },
 
@@ -361,7 +378,8 @@ var app =  app || {};
 
         // Update Justgiving information.
         that.getJustGivingInformation();
-        // Update Twitter feed.
+
+        // TODO: Update Twitter feed.
 
         // Update map.
         $.ajax({
@@ -396,7 +414,7 @@ var app =  app || {};
 
       this.locations.unshift(latLng);
 
-      this.drawPath(this.locations, '#FF0000');
+      this.drawPath(this.locations, '#ed1a3a');
 
       // Remove overlay if exists.
       if (this.overlay !== null) {
@@ -408,7 +426,9 @@ var app =  app || {};
       this.map.panTo(latLng);
 
       // Update total distance.
-      $(".js-totaldistance").html(this.getTotalDistance(this.route));
+      //$(".js-totaldistance").html(this.getTotalDistance(this.route));
+
+      this.showTotalDistance(this.route);
 
       // Update clock.
       clearInterval(this.hourInterval);

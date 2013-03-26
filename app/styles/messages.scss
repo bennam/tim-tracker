@@ -1,0 +1,53 @@
+aside {
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.85);
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+	width: 415px;
+	height: 110px;
+	z-index: 10;
+	padding: 20px 15px;
+	.man {
+		position: absolute;
+		bottom: 148px;
+		right: 30px;
+	}
+	a {
+		position: absolute;
+		bottom: 20px;
+		right: 30px;
+		font-size: 13px;
+		font-weight: 600;
+		text-transform: uppercase;
+		color: #fff;
+	}
+	a:hover,
+	a:focus {
+		font-weight: 600;
+		color: #fff;
+	}
+}
+
+#messages { 
+	div {
+		position: absolute; 
+		display:none;
+	}
+	.person {
+		color: $red;
+		font-size: 12px;
+		text-transform: uppercase;
+		margin: 9px 0 0 33px;
+	}
+	.right-caret {
+	    border-bottom: 4px solid transparent;
+	    border-top: 4px solid transparent;
+	    border-left: 4px solid $red;
+	    display: inline-block;
+	    height: 0;
+	    opacity: 1;
+	    vertical-align: top;
+	    width: 0;
+	}
+}

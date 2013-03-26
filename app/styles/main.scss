@@ -1,6 +1,9 @@
 @import 'sass-bootstrap/lib/bootstrap';
-
-$marker-color: #dc002e;
+@import 'varibles';
+@import 'typography';
+@import 'map';
+@import 'sidebar';
+@import 'messages';
 
 html { 
 	height: 100%;
@@ -9,97 +12,4 @@ body {
 	height: 100%; 
 	margin: 0; 
 	padding: 0 
-}
-#map_canvas { 
-	height: 100%; 
-	width: 100%; 
-	position: absolute; 
-	top: 0; 
-	left: 0; 
-}
-.information { 
-	background-color: #fff; 
-	width: 300px; 
-	height: 300px; 
-	position: absolute;
-	bottom: 0; 
-	left: 0; 
-	z-index: 10;
-
-	.js-localtime { 
-		display: none; 
-	}
-}
-
-#messages { 
-	background: #fff;
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	width: 380px;
-	height: 300px;
-	z-index: 10;
-	div {
-		position: absolute; 
-		display:none;
-	}
-}
-
-// Googles maps marker animation
-
-.marker {
-	position: absolute;
-	width: 40px;
-	height: 40px;	
-	cursor: pointer;
-	z-index: 100;
-	top: -240px;
-	left: 200px;
-
-	.marker-shape {
-		position: absolute;
-		top: 12px;
-		left: 12px;
-		width: 16px;
-		height: 16px;
-		@include border-radius(8px);
-		background: $marker-color;
-	}
-
-	.marker-glow {
-		position: absolute;
-		top: -10px;
-		left: -10px;
-		width: 40px;
-		height: 40px;	
-		@include border-radius(30px);
-		border: 10px solid $marker-color;
-		opacity: 0;
-		-webkit-animation-name: 'blip';
-		-webkit-animation-duration: 2s;
-		-webkit-animation-iteration-count: infinite;
-		-webkit-animation-timing-function: ease-in-out;
-	}
-
-}
-
-
-@-webkit-keyframes 'blip'
-{		
-	0% {
-		-webkit-transform: scale(.1);	
-		opacity: 0;
-	}
-	1% {
-		-webkit-transform: scale(.1);	
-		opacity: .6;
-	}
-	60% {
-		opacity: 0;
-		-webkit-transform: scale(1);
-	}
-	100% {
-		opacity: 0;
-		-webkit-transform: scale(1);
-	}
 }

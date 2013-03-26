@@ -1,0 +1,135 @@
+header {
+	height: 200px;
+	background-color: #000;
+	img {
+		margin: 35px 0 0 33px;
+	}
+}
+
+.sidebar {
+	height: 100%;
+	width: 200px;
+	position: relative;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.85);
+	z-index: 3;
+	p {
+		font-size: 12px;
+		color: $red;
+		text-transform: uppercase;
+	}
+}
+
+.information {
+	ul {
+		margin: 0;
+		padding: 0;
+	}
+	li {
+		list-style-type: none;
+		border-bottom: 2px solid #181818;
+	}
+	li:nth-child(1) {
+		background: transparent url('../img/camel.png') no-repeat 9% 50%;
+	}
+	li:nth-child(2) {
+		background: transparent url('../img/radar.png') no-repeat 6% 50%;
+	}
+	li:nth-child(3) {
+		background: transparent url('../img/money.png') no-repeat 9% 50%;
+	}
+	p {
+		padding: 10px 20px 2px 63px;
+		span {
+			font-size: 16px;
+			color: #fff;
+			font-weight: 600;
+			display: block;
+			word-wrap: break-word;
+			.seperator {
+				display: inline;
+				color: $red;
+				font-weight: 800;
+				font-size: 18px;
+				padding: 0 3px 0 6px;
+			}
+		}
+	}
+	#hours, #min, #sec {
+		display: inline;
+	}
+	.js-localtime { 
+		display: none; 
+	}
+}
+
+.twitter {
+	background-color: #c3c3c3;
+	height: 200px;
+	.twitter-test {
+		margin: 19px 0 0 14px;
+	}
+}
+
+.logos{
+	margin: 15px;
+	p {
+		margin: 0 0 2px;
+	}
+} 
+
+footer {
+	ul {
+		list-style-type: none;
+		padding: 14px 0 0 15px;
+		margin: 0;
+		li {
+			float: left;
+			a {
+				padding: 3px 6px;
+			}
+		}
+		li:nth-child(1) a {
+			background: url(../img/sprite.png) no-repeat 0 0;
+			width: 15px;
+			height: 15px;
+			display: block;
+		}
+		li:nth-child(2) a {
+			background: url(../img/sprite.png) no-repeat 0 -24px;
+			width: 21px;
+			height: 14px;
+			display: block;
+		}
+	}
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: 45px;
+	background-color: #000;
+	border-top: 1px solid #e8e8e8;
+	width: 200px;
+	.lynx-logo {
+		position: absolute;
+		bottom: 50px;
+	}
+	#js-close {
+		background: url(../img/sprite.png) no-repeat 0 -184px;
+		width: 20px;
+		height: 16px;
+		display: block;
+		padding:  7px;
+		float:  right;
+	}
+}
+#js-open {
+	background: url(../img/sprite.png) no-repeat 0 -214px;
+	width: 20px;
+	height: 16px;
+	display: block;
+	padding: 7px;
+	position: absolute;
+	bottom: 16px;
+	left: 13px;
+	z-index: 2;
+}

@@ -1,0 +1,43 @@
+body {
+
+	font-family: "proxima-nova",sans-serif;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+
+}
+
+#messages {
+	font-size: 16px;
+	color: #fff;
+}
+
+
+blockquote {
+	border: 0;
+	padding: 2px 0 0 29px;
+	margin: 5px;
+	text-indent: 0px;
+	background: transparent url('../img/quote-left.png') no-repeat 0 0;
+	max-width: 280px;
+	span {
+		display: inline;
+		padding-right: 30px;
+		background: transparent url('../img/quote-right.png') no-repeat 0 0;
+		background-position: bottom right;
+	}
+
+}
+
+.side-caret {
+	border-style: solid;
+	border-width: 5px 0px 5px 5px;
+	border-bottom-color: transparent;
+	border-left-color: $red;
+	border-top-color: transparent;
+	border-right-color: transparent;
+	height: 0px;
+	width: 0px;
+	display: inline-block;
+	margin: 0px 5px 0 0;
+}
