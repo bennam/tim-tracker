@@ -34,6 +34,12 @@ aside {
 		position: absolute; 
 		display:none;
 	}
+	strong {
+		font-size: 18px;
+		display: block;
+		margin: 10px 0 0 20px;
+		text-transform: uppercase;
+	}
 	.person {
 		color: $red;
 		font-size: 12px;

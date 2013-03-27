@@ -41,40 +41,9 @@ var app =  app || {};
 
     },
 
-    // TODO: Get latest twitter feed.
     latestTweet: function () {
 
-      jQuery(function($){
-        // $("#twitter").tweet({
-        //   join_text: "auto",
-        //   username: "seaofclouds",
-        //   avatar_size: 48,
-        //   count: 3,
-        //   auto_join_text_default: " we said, ",
-        //   auto_join_text_ed: " we ",
-        //   auto_join_text_ing: " we were ",
-        //   auto_join_text_reply: " we replied ",
-        //   auto_join_text_url: " we were checking out ",
-        //   loading_text: "loading tweets..."
-        // });
-
-        $("#twitter").tweet({
-          avatar_size: 32,
-          count: 1,
-          username: "seaofclouds",
-          loading_text: "searching twitter...",
-          template: "{avatar}{text}{join} {time}"
-        });
-
-      });
-
-      // $("#twitter").tweet({
-      //   avatar_size: 32,
-      //   count: 1,
-      //   query: "High5ives HAVASLYNXEU",
-      //   loading_text: "searching twitter...",
-      //   template: "{avatar}{text}{join} {time}"
-      // });
+      JQTWEET.loadTweets();
 
     },
 
@@ -110,14 +79,22 @@ var app =  app || {};
 
     showDonationMessages: function (data) {
 
+      // Clear interval and html div.
       clearInterval(this.messageInterval);
-
       $('#messages').html('');
 
       $.each(data.donations, function (i, item) {
 
         if ( (item.person !== '') && (item.message !== '') ) {
+
+          // Limit text to 125 characters.
+          if(item.message.length > 125){
+            item.message = item.message.substring(0,125) + '...';
+          }
+
           $('#messages').append('<div><blockquote><span>' + item.message + '</span></blockquote><p class="person">' + item.person + '</p></div>');
+
+
         }
 
       });
@@ -255,9 +232,12 @@ var app =  app || {};
 
           that.drawPath(that.locations, '#ed1a3a');
           that.map.setCenter(that.locations[0]);
-          that.addMarkerAnimation(that.locations[0]);
+          that.addCustomMarkerAnimation(that.locations[0]);
           that.getLocalTime(that.locations[0]);
           that.showTotalDistance(that.route);
+
+          that.addMarker(that.locations.pop(),'start-icon.png')
+          
 
         }
 
@@ -265,7 +245,19 @@ var app =  app || {};
 
     },
 
-    addMarkerAnimation: function (latLng) {
+    addMarker: function (latLng, icon) {
+
+      var iconBase = 'images/';
+
+      var marker = new google.maps.Marker({
+        position: latLng,
+        map: this.map,
+        icon: iconBase + icon
+      });
+
+    },
+
+    addCustomMarkerAnimation: function (latLng) {
 
       USGSOverlay.prototype = new google.maps.OverlayView();
 
@@ -393,7 +385,7 @@ var app =  app || {};
               newLocation.push(new google.maps.LatLng(item.latitude, item.longitude));
             });
             that.updateMap(newLocation[0]);
-            console.log('Position updated');
+
           },
 
           error: function (xhr, err) {  
@@ -402,9 +394,22 @@ var app =  app || {};
           }
         });
 
-
-
       }, interval);
+
+    },
+
+    logLastUpdate: function () {
+
+      var currentdate = new Date(); 
+
+      var lastUpdate = "Position updated: " + currentdate.getDate() + "/"
+      + (currentdate.getMonth()+1)  + "/" 
+      + currentdate.getFullYear() + " @ "  
+      + currentdate.getHours() + ":"  
+      + currentdate.getMinutes() + ":" 
+      + currentdate.getSeconds();
+
+      return lastUpdate;
 
     },
 
@@ -422,17 +427,17 @@ var app =  app || {};
       }
 
       // Update marker animation.
-      this.addMarkerAnimation(latLng);
+      this.addCustomMarkerAnimation(latLng);
       this.map.panTo(latLng);
 
       // Update total distance.
-      //$(".js-totaldistance").html(this.getTotalDistance(this.route));
-
       this.showTotalDistance(this.route);
 
       // Update clock.
       clearInterval(this.hourInterval);
       this.getLocalTime(latLng);
+
+      console.log(that.logLastUpdate());
 
     }
 

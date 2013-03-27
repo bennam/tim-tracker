@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
+        <title>HIGH5IVES Tim Tracker | LYNX</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -19,48 +19,60 @@
     </head>
     <body>
         <div class="sidebar">
-            <div id="wrap">
-                <header>
-                    <a href="http://www.havaslynx.com/highfives/" target="_blank">
-                        <img src="img/logo.png" height="117" width="122" alt="Highfives logo">
-                    </a>
-                </header>
-                <section class="information">
-                    <ul>
-                        <li>
-                            <p>Local time
-                                <span class="js-localtime-loading">Loading...</span>
-                                <span class="js-localtime">
-                                    <span id="hours"></span>:
-                                    <span id="min"></span>:
-                                    <span id="sec"></span>
-                                </span>
-                            </p>
-                        </li>
-                        <li>
-                            <p>Total distance<span class="js-total-distance">Loading...</span></p>
-                        </li>
-                        <li>
-                            <p>Total raised<span class="js-amount">Loading...</span></p>
-                        </li>
-                    </ul>
-                </section>
-                <section class="twitter">
-                    <img class="twitter-test" src="img/twitter-test.png" height="151" width="167" alt="">
-                </section>
-                <div class="jg-logo logos">
-                    <p>Donate</p>
-                    <a href="http://www.justgiving.com/TimWoodcockMdS">
-                        <img src="img/justgiving-logo.png" height="17" width="103" alt="Just giving logo">
-                    </a>
+            <header>
+                <a href="http://www.havaslynx.com/highfives/" target="_blank">
+                    <img src="images/logo.png" height="117" width="122" alt="Highfives logo">
+                </a>
+            </header>
+            <section class="information">
+                <ul>
+                    <li>
+                        <p>Local time
+                            <span class="js-localtime-loading">Loading...</span>
+                            <span class="js-localtime">
+                                <span id="hours"></span>:
+                                <span id="min"></span>:
+                                <span id="sec"></span>
+                            </span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>Total distance<span class="js-total-distance">Loading...</span></p>
+                    </li>
+                    <li>
+                        <p>Total raised<span class="js-amount">Loading...</span></p>
+                    </li>
+                </ul>
+            </section>
+            <section class="twitter">
+                <div id="jstwitter">
+                    <div class="preloader">
+                        <p>Latest tweets</p>
+                        <img src="images/ajax-loader.gif" height="32" width="32" alt="Loading...">
+                    </div>
+                    
+        <!--             <header>
+                        <img src="images/twitter-icon.png" height="28" width="28" alt="">
+                        <ul>
+                            <li><a href="{URL}" target="_blank">20 Mar</a></li>
+                            <li><a href="{URL}" target="_blank">@nick_greenwood</a></li>
+                        </ul>
+                    </header>
+                    <p>@HAVASLYNXEU 's @tim_woodcock is running 5.5 marathons in the Sahara to raise £50k for @thisisexcellent http://goo.gl/mhpUf #High5ives</p> -->
                 </div>
-                <div id="push"></div>
+            </section>
+            <div class="jg-logo logos">
+                <p>Donate</p>
+                <a href="http://www.justgiving.com/TimWoodcockMdS">
+                    <img src="images/justgiving-logo.png" height="17" width="103" alt="Just giving logo">
+                </a>
             </div>
+
             <footer>
                 <div class="lynx-logo logos">
                     <p>By</p>
                     <a href="http://www.havaslynx.com/">
-                        <img src="img/lynx-logo.png" height="33" width="74" alt="Havas Lynx logo">
+                        <img src="images/lynx-logo.png" height="33" width="74" alt="Havas Lynx logo">
                     </a>
                 </div>
                 <div class="social-media">
@@ -72,21 +84,25 @@
                 </div>
             </footer>
         </div>
-        <div class="container">
-            <div id="map_canvas" style="width: 100%; height: 100%"></div>
-        </div>
+     
+        <div id="map_canvas" style="width: 100%; height: 100%"></div>
+
         <aside>
-            <img class="man" src="img/man.png" height="76" width="41" alt="Man">
+            <img class="man" src="images/man.png" height="76" width="41" alt="Man">
             <div id="messages"> 
 
-                <p>Loading...</p>
+                <p><strong>Loading...</strong></p>
                 <!-- <blockquote><span>Great work Tim. Good luck. Thank you sincerely on behalf of the charity. We really appreciate your support and incredible fundraising efforts</span></blockquote><p class="person">Richard Barnes</p> -->
             </div>  
 
             <a href="http://www.justgiving.com/TimWoodcockMdS"><span class="side-caret"></span>View all</a>          
         </aside>
-        <a id="js-open" href="#"></a>
 
+        <div class="open">
+            <span>
+                <a id="js-open" href="#"></a>
+            </span>
+        </div>
 
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
@@ -103,30 +119,13 @@
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSPNG7Lq0PlgHlDzCe7H4ab6oVZwBPPGE&amp;sensor=false"
   type="text/javascript"></script>
 
-        <!-- build:js scripts/main.js -->
-        <script src="components/jquery/jquery.js"></script>
-        <script src="scripts/main.js"></script>
-        <!-- endbuild -->
-
-        <!-- build:js(.tmp) scripts/coffee.js -->
-        <script src="scripts/hello.js"></script>
-        <!-- endbuild -->
-
         <!-- build:js scripts/plugins.js -->
-        <script src="components/seaofclouds.tweet/tweet/jquery.tweet.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-affix.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-alert.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-dropdown.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-tooltip.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-modal.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-transition.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-button.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-popover.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-typeahead.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-carousel.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-scrollspy.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-collapse.js"></script>
-        <script src="components/sass-bootstrap/js/bootstrap-tab.js"></script>
+        <script src="components/jquery/jquery.js"></script>
+        <script src="components/twitter.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js scripts/main.js -->
+        <script src="scripts/main.js"></script>
         <!-- endbuild -->
 
 </body>

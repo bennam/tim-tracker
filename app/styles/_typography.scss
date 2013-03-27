@@ -1,3 +1,5 @@
+@import 'varibles';
+
 body {
 
 	font-family: "proxima-nova",sans-serif;
@@ -18,12 +20,12 @@ blockquote {
 	padding: 2px 0 0 29px;
 	margin: 5px;
 	text-indent: 0px;
-	background: transparent url('../img/quote-left.png') no-repeat 0 0;
+	background: transparent url('../images/quote-left.png') no-repeat 0 0;
 	max-width: 280px;
 	span {
 		display: inline;
 		padding-right: 30px;
-		background: transparent url('../img/quote-right.png') no-repeat 0 0;
+		background: transparent url('../images/quote-right.png') no-repeat 0 0;
 		background-position: bottom right;
 	}
 
