@@ -90,8 +90,7 @@ module.exports = function (grunt) {
         },
         clean: {
             dist: ['.tmp', '<%= yeoman.dist %>/*'],
-            server: '.tmp',
-            rename: '<%= yeoman.dist %>/timtracker.html'
+            server: '.tmp'
         },
         jshint: {
             options: {
@@ -231,13 +230,8 @@ module.exports = function (grunt) {
                         '.htaccess',
                         'timtracker/api/*.php',
                         '*.html',
-                        'timtracker/images/{,*/}*.{webp,gif}'
+                        'timtracker/images/{,*/}*.{webp,gif,ico}'
                     ]
-                }]
-            },
-            rename: {
-                files: [{
-                    src: ['dist/timtracker.html'], dest: 'dist/timtracker.php'
                 }]
             }
         },
@@ -285,9 +279,7 @@ module.exports = function (grunt) {
         'cssmin',
         'uglify',
         'copy:dist',
-        'usemin',
-        'copy:rename',
-        'clean:rename'
+        'usemin'
     ]);
 
     grunt.registerTask('default', [

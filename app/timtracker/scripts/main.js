@@ -247,7 +247,7 @@ var app =  app || {};
 
     addMarker: function (latLng, icon) {
 
-      var iconBase = 'images/';
+      var iconBase = 'timtracker/images/';
 
       var marker = new google.maps.Marker({
         position: latLng,
