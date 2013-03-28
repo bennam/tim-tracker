@@ -25,7 +25,7 @@ module.exports = function (grunt) {
         yeoman: yeomanConfig,
         watch: {
             coffee: {
-                files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
+                files: ['<%= yeoman.app %>/timtracker/scripts/{,*/}*.coffee'],
                 tasks: ['coffee:dist']
             },
             coffeeTest: {
@@ -33,15 +33,15 @@ module.exports = function (grunt) {
                 tasks: ['coffee:test']
             },
             compass: {
-                files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+                files: ['<%= yeoman.app %>/timtracker/styles/{,*/}*.{scss,sass}'],
                 tasks: ['compass']
             },
             livereload: {
                 files: [
                     '<%= yeoman.app %>/*.html',
-                    '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
-                    '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
-                    '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,webp}'
+                    '{.tmp,<%= yeoman.app %>}/timtracker/styles/{,*/}*.css',
+                    '{.tmp,<%= yeoman.app %>}/timtracker/scripts/{,*/}*.js',
+                    '<%= yeoman.app %>/timtracker/images/{,*/}*.{png,jpg,jpeg,webp}'
                 ],
                 tasks: ['livereload']
             }
@@ -85,12 +85,13 @@ module.exports = function (grunt) {
         },
         open: {
             server: {
-                path: 'http://localhost:<%= connect.options.port %>'
+                path: 'http://localhost:<%= connect.options.port %>/timtracker.html'
             }
         },
         clean: {
             dist: ['.tmp', '<%= yeoman.dist %>/*'],
-            server: '.tmp'
+            server: '.tmp',
+            rename: '<%= yeoman.dist %>/timtracker.html'
         },
         jshint: {
             options: {
@@ -98,8 +99,8 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                '<%= yeoman.app %>/scripts/{,*/}*.js',
-                '!<%= yeoman.app %>/scripts/vendor/*',
+                '<%= yeoman.app %>/timtracker/scripts/{,*/}*.js',
+                '!<%= yeoman.app %>/timtracker/scripts/vendor/*',
                 'test/spec/{,*/}*.js'
             ]
         },
@@ -117,9 +118,9 @@ module.exports = function (grunt) {
                     // rather than compiling multiple files here you should
                     // require them into your main .coffee file
                     expand: true,
-                    cwd: '<%= yeoman.app %>/scripts',
+                    cwd: '<%= yeoman.app %>/timtracker/scripts',
                     src: '*.coffee',
-                    dest: '.tmp/scripts',
+                    dest: '.tmp/timtracker/scripts',
                     ext: '.js'
                 }]
             },
@@ -134,11 +135,11 @@ module.exports = function (grunt) {
         },
         compass: {
             options: {
-                sassDir: '<%= yeoman.app %>/styles',
-                cssDir: '.tmp/styles',
-                imagesDir: '<%= yeoman.app %>/images',
-                javascriptsDir: '<%= yeoman.app %>/scripts',
-                fontsDir: '<%= yeoman.app %>/styles/fonts',
+                sassDir: '<%= yeoman.app %>/timtracker/styles',
+                cssDir: '.tmp/timtracker/styles',
+                imagesDir: '<%= yeoman.app %>/timtracker/images',
+                javascriptsDir: '<%= yeoman.app %>/timtracker/scripts',
+                fontsDir: '<%= yeoman.app %>/timtracker/styles/fonts',
                 importPath: 'app/components',
                 relativeAssets: true
             },
@@ -158,21 +159,21 @@ module.exports = function (grunt) {
         uglify: {
             dist: {
                 files: {
-                    '<%= yeoman.dist %>/scripts/main.js': [
-                        '<%= yeoman.app %>/scripts/{,*/}*.js'
+                    '<%= yeoman.dist %>/timtracker/scripts/main.js': [
+                        '<%= yeoman.app %>/timtracker/scripts/{,*/}*.js'
                     ],
                 }
             }
         },
         useminPrepare: {
-            html: '<%= yeoman.app %>/index.html',
+            html: '<%= yeoman.app %>/timtracker.html',
             options: {
                 dest: '<%= yeoman.dist %>'
             }
         },
         usemin: {
             html: ['<%= yeoman.dist %>/{,*/}*.html'],
-            css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
+            css: ['<%= yeoman.dist %>/timtracker/styles/{,*/}*.css'],
             options: {
                 dirs: ['<%= yeoman.dist %>']
             }
@@ -181,18 +182,18 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= yeoman.app %>/images',
+                    cwd: '<%= yeoman.app %>/timtracker/images',
                     src: '{,*/}*.{png,jpg,jpeg,gif}',
-                    dest: '<%= yeoman.dist %>/images'
+                    dest: '<%= yeoman.dist %>/timtracker/images'
                 }]
             }
         },
         cssmin: {
             dist: {
                 files: {
-                    '<%= yeoman.dist %>/styles/main.css': [
-                        '.tmp/styles/{,*/}*.css',
-                        '<%= yeoman.app %>/styles/{,*/}*.css'
+                    '<%= yeoman.dist %>/timtracker/styles/main.css': [
+                        '.tmp/timtracker/styles/{,*/}*.css',
+                        '<%= yeoman.app %>/timtracker/styles/{,*/}*.css'
                     ]
                 }
             }
@@ -200,15 +201,15 @@ module.exports = function (grunt) {
         htmlmin: {
             dist: {
                 options: {
-                    /*removeCommentsFromCDATA: true,
-                    // https://github.com/yeoman/grunt-usemin/issues/44
-                    //collapseWhitespace: true,
-                    collapseBooleanAttributes: true,
-                    removeAttributeQuotes: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true,
-                    removeEmptyAttributes: true,
-                    removeOptionalTags: true*/
+                    // removeCommentsFromCDATA: true,
+                    // // https://github.com/yeoman/grunt-usemin/issues/44
+                    // //collapseWhitespace: true,
+                    // collapseBooleanAttributes: true,
+                    // removeAttributeQuotes: true,
+                    // removeRedundantAttributes: true,
+                    // useShortDoctype: true,
+                    // removeEmptyAttributes: true,
+                    // removeOptionalTags: true
                 },
                 files: [{
                     expand: true,
@@ -228,15 +229,21 @@ module.exports = function (grunt) {
                     src: [
                         '*.{ico,txt}',
                         '.htaccess',
-                        'api/*.php',
-                        'images/{,*/}*.{webp,gif}'
+                        'timtracker/api/*.php',
+                        '*.html',
+                        'timtracker/images/{,*/}*.{webp,gif}'
                     ]
+                }]
+            },
+            rename: {
+                files: [{
+                    src: ['dist/timtracker.html'], dest: 'dist/timtracker.php'
                 }]
             }
         },
         bower: {
             all: {
-                rjsConfig: '<%= yeoman.app %>/scripts/main.js'
+                rjsConfig: '<%= yeoman.app %>/timtracker/scripts/main.js'
             }
         }
     });
@@ -277,8 +284,10 @@ module.exports = function (grunt) {
         'concat',
         'cssmin',
         'uglify',
-        'copy',
-        'usemin'
+        'copy:dist',
+        'usemin',
+        'copy:rename',
+        'clean:rename'
     ]);
 
     grunt.registerTask('default', [
