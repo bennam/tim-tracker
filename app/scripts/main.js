@@ -371,7 +371,8 @@ var app =  app || {};
         // Update Justgiving information.
         that.getJustGivingInformation();
 
-        // TODO: Update Twitter feed.
+        // Update Twitter feed.
+        that.latestTweet();
 
         // Update map.
         $.ajax({
