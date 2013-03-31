@@ -8,6 +8,7 @@ var app =  app || {};
 
     map: null,
     route: null,
+    marker: null,
     currentPositionMarker: null,
     locations: [],
     hourInterval: null,
@@ -25,6 +26,10 @@ var app =  app || {};
       this.updateAll(300000);
 
       this.toggleSidebar();
+
+      $('.js-drag').dragon({
+        'within': $('body')
+      });
       
     },
 
@@ -32,18 +37,18 @@ var app =  app || {};
 
       $("#js-close").on("click", function(e){
         e.preventDefault();
-        $('.sidebar').animate({"left": "-200"}, "800");
+        $('.left-col').animate({"left": "-200"}, "800");
       }); 
       $("#js-open").on("click", function(e){
         e.preventDefault();
-        $('.sidebar').animate({"left": "0"}, "800");
+        $('.left-col').animate({"left": "0"}, "800");
       }); 
 
     },
 
     latestTweet: function () {
 
-      JQTWEET.loadTweets();
+      // JQTWEET.loadTweets();
 
     },
 
@@ -93,7 +98,6 @@ var app =  app || {};
           }
 
           $('#messages').append('<div><blockquote><span>' + item.message + '</span></blockquote><p class="person">' + item.person + '</p></div>');
-
 
         }
 
@@ -186,7 +190,7 @@ var app =  app || {};
 
       setTimeout(function() {
         $(".js-localtime-loading").hide();
-        $(".js-localtime").css('display', 'block')
+        $(".js-localtime").css('display', 'block');
       }, 1010);
 
     },
@@ -228,16 +232,15 @@ var app =  app || {};
 
           $.each(json.response.feedMessageResponse.messages.message, function (i, item) {
               that.locations.push(new google.maps.LatLng(item.latitude, item.longitude));
-          });
 
+          });
+  
           that.drawPath(that.locations, '#ed1a3a');
           that.map.setCenter(that.locations[0]);
           that.addCustomMarkerAnimation(that.locations[0]);
           that.getLocalTime(that.locations[0]);
           that.showTotalDistance(that.route);
-
-          that.addMarker(that.locations.pop(),'start-icon.png')
-          
+          that.addMarker(that.locations[that.locations.length - 1],'start-icon.png');
 
         }
 
@@ -249,7 +252,7 @@ var app =  app || {};
 
       var iconBase = 'timtracker/images/';
 
-      var marker = new google.maps.Marker({
+       this.marker = new google.maps.Marker({
         position: latLng,
         map: this.map,
         icon: iconBase + icon
@@ -289,7 +292,7 @@ var app =  app || {};
         var panes = this.getPanes();
         panes.overlayLayer.appendChild(div);
 
-      }
+      };
 
       USGSOverlay.prototype.draw = function() {
 
@@ -304,12 +307,12 @@ var app =  app || {};
           div.style.top = (pos.y - 20) + 'px';
         }
 
-      }
+      };
 
       USGSOverlay.prototype.onRemove = function() {
         this.div_.parentNode.removeChild(this.div_);
         this.div_ = null;
-      }
+      };
       
 
     },
@@ -349,14 +352,14 @@ var app =  app || {};
         var f = 2 * e.asin(e.sqrt(e.pow(e.sin(d/2), 2) + e.cos(b) * e.cos 
           (c) * e.pow(e.sin(g/2), 2))); 
         return f * 6378.137; 
-      } 
+      }; 
       google.maps.Polyline.prototype.inKm = function(n){ 
         var a = this.getPath(n), len = a.getLength(), dist = 0; 
         for(var i=0; i<len-1; i++){ 
           dist += a.getAt(i).kmTo(a.getAt(i+1)); 
         } 
         return dist; 
-      }
+      };
 
      return Math.round(path.inKm());
 
@@ -403,17 +406,12 @@ var app =  app || {};
 
       var currentdate = new Date(); 
 
-      var lastUpdate = "Position updated: " + currentdate.getDate() + "/"
-      + (currentdate.getMonth()+1)  + "/" 
-      + currentdate.getFullYear() + " @ "  
-      + currentdate.getHours() + ":"  
-      + currentdate.getMinutes() + ":" 
-      + currentdate.getSeconds();
+      var lastUpdate = "Position updated: " + currentdate.getDate() + "/" + (currentdate.getMonth() + 1)  + "/" + currentdate.getFullYear() + " @ " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
 
       return lastUpdate;
 
     },
-
+    
     updateMap: function (latLng) {
 
       var that = this;
@@ -424,7 +422,7 @@ var app =  app || {};
 
       // Remove overlay if exists.
       if (this.overlay !== null) {
-        this.overlay.onRemove(app.global.overlay)
+        this.overlay.onRemove(app.global.overlay);
       }
 
       // Update marker animation.
@@ -442,7 +440,7 @@ var app =  app || {};
 
     }
 
-  }
+  };
 
   $(function() {
       app.global.init();

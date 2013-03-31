@@ -6,19 +6,15 @@ tim-tracker
 
 
 
-
+// browser testing
 
 
 // Testing
 
-// Start icon
+
 
 // Klm feed
 
 // Performance
 
 // Responsive
-
-// icons
-
-// GA anayltics

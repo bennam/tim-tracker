@@ -19,7 +19,7 @@
         <script >try{Typekit.load();}catch(e){}</script>
     </head>
     <body>
-        <div class="sidebar">
+        <div class="left-col">
             <header>
                 <a href="http://www.havaslynx.com/highfives/" target="_blank">
                     <img src="timtracker/images/logo.png" height="117" width="122" alt="Highfives logo">
@@ -55,21 +55,21 @@
             </section>
             <div class="jg-logo logos">
                 <p>Donate</p>
-                <a href="http://www.justgiving.com/TimWoodcockMdS">
+                <a href="http://www.justgiving.com/TimWoodcockMdS" target="_blank">
                     <img src="timtracker/images/justgiving-logo.png" height="17" width="103" alt="Just giving logo">
                 </a>
             </div>
             <footer>
                 <div class="lynx-logo logos">
                     <p>By</p>
-                    <a href="http://www.havaslynx.com/">
+                    <a href="http://www.havaslynx.com/" target="_blank">
                         <img src="timtracker/images/lynx-logo.png" height="33" width="74" alt="Havas Lynx logo">
                     </a>
                 </div>
                 <div class="social-media">
                     <ul>
-                        <li><a href="http://www.facebook.com/events/125952937588161/"></a></li>
-                        <li><a href="https://twitter.com/search/realtime?q=%23High5ives"></a></li>
+                        <li><a href="http://www.facebook.com/events/125952937588161/" target="_blank"></a></li>
+                        <li><a href="https://twitter.com/search/realtime?q=%23High5ives" target="_blank"></a></li>
                     </ul>
                     <a id="js-close" href="#"></a>
                 </div>
@@ -78,13 +78,16 @@
      
         <div id="map_canvas" style="width: 100%; height: 100%"></div>
 
-        <aside>
-            <img class="man" src="timtracker/images/man.png" height="76" width="41" alt="Man">
-            <div id="messages"> 
-                <p><strong>Loading...</strong></p>
-            </div>  
-            <a href="http://www.justgiving.com/TimWoodcockMdS"><span class="side-caret"></span>View all</a>          
-        </aside>
+        <div class="right-col">
+            <aside class="js-drag">
+                <img class="man" src="timtracker/images/man.png" height="76" width="41" alt="Man">
+                <div id="messages"> 
+                    <p><strong>Loading...</strong></p>
+                </div>  
+                <a href="http://www.justgiving.com/TimWoodcockMdS" target="_blank"><span class="side-caret"></span>View all</a>          
+            </aside>
+        </div>
+
         <div class="open">
             <span>
                 <a id="js-open" href="#"></a>
@@ -104,7 +107,8 @@
   type="text/javascript"></script>
         <!-- build:js timtracker/scripts/plugins.js -->
         <script src="components/jquery/jquery.js"></script>
-        <script src="components/twitter.js"></script>
+        <script src="components/jquery-dragon/src/jquery.dragon.js"></script>
+        <!--<script src="components/twitter.js"></script>-->
         <!-- endbuild -->
         <!-- build:js timtracker/scripts/main.js -->
         <script src="timtracker/scripts/main.js"></script>

@@ -1,0 +1,59 @@
+@media only screen and (max-width: 979px) {
+
+	.left-col {
+
+		> header {
+			background-color: red !important;
+		}
+
+	}
+	
+}
+
+@media only screen and (max-width: 767px) {
+
+	.left-col {
+
+		> header {
+			background-color: green !important;
+		}
+
+	}
+	
+}
+
+@media only screen and (max-width: 480px) {
+
+	#map_canvas {
+		min-height: auto;
+		height: 500px;
+		position: relative;
+	}
+
+	.left-col {
+
+		width: 100%;
+		height: auto;
+		min-height: auto;
+
+		> header {
+			background-color: blue !important;
+			width: 200px;
+			float: left;
+		}
+
+	}
+
+	#js-close, .open {
+		display: none;
+	}
+
+	.js-drag {
+		width: 100%;
+		bottom: 0;
+		left: 0;
+	}
+
+
+	
+}
