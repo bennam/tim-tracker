@@ -1,50 +1,16 @@
-@media only screen and (max-width: 979px) {
-
-	.left-col {
-
-		> header {
-			background-color: red !important;
-		}
-
-	}
-	
-}
-
-@media only screen and (max-width: 767px) {
-
-	.left-col {
-
-		> header {
-			background-color: green !important;
-		}
-
-	}
-	
-}
-
 @media only screen and (max-width: 480px) {
 
-	#map_canvas {
-		min-height: auto;
-		height: 500px;
-		position: relative;
-	}
-
-	.left-col {
-
+	aside {
 		width: 100%;
-		height: auto;
-		min-height: auto;
-
-		> header {
-			background-color: blue !important;
-			width: 200px;
-			float: left;
+		padding: 20px 0 15px;
+		position: inherit !important;
+		background-image: none;
+		a {
+			bottom: -106px;
 		}
-
 	}
 
-	#js-close, .open {
+	.open {
 		display: none;
 	}
 
@@ -52,8 +18,63 @@
 		width: 100%;
 		bottom: 0;
 		left: 0;
+		cursor: pointer;
 	}
 
+	#map_canvas {
+		min-height: auto;
+		height: 290px !important;
+		position: relative;
+	}
 
+	.left-col {
+
+		.jg-logo {
+			display: none;
+		}
+
+		width: 100%;
+		height: auto;
+		min-height: inherit;
+
+		> header {
+			width: 150px;
+			float: left;
+			height: 150px;
+			img {
+				margin: 35px 0 0 33px;
+				width: 53%;
+			}
+		}
+
+		footer {
+			display: none;
+			position: relative;
+			.social-media {
+				width: 100%;
+			}
+			#js-close {
+				display: none;
+			} 
+		}
+
+		.information{
+			li {
+				border: 0;
+				background: none;
+			}
+			ul {
+				float: left;
+				margin: 5px 0 0 5px;
+			}
+			p {
+				padding: 0px 0 0 5px;
+				margin: 0 0 7px;
+
+			}
+			
+		}
+
+	}
 	
 }
