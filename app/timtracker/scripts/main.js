@@ -48,7 +48,7 @@ var app =  app || {};
 
     latestTweet: function () {
 
-      // JQTWEET.loadTweets();
+      JQTWEET.loadTweets();
 
     },
 
@@ -142,11 +142,12 @@ var app =  app || {};
 
       var ts = Math.round((new Date()).getTime() / 1000),
           that = this,
-          url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + latLng.lat() + ',' + latLng.lng() + '&timestamp=' + ts + '&sensor=false';   
+          url = 'http://api.geonames.org/timezoneJSON?formatted=true&lat=' + latLng.lat() + '&lng=' + latLng.lng() + '&username=bennam&style=full';
 
       $.ajax({
         type: "GET",
         url: url,
+        cache: false,
         dataType: "json",
 
         success: function(json) {
@@ -166,7 +167,7 @@ var app =  app || {};
 
     displayLocalTime: function (rawOffset) {
 
-      var offset = Math.floor(parseInt(rawOffset, 10) / 3600);
+      var offset = Math.floor(parseInt(rawOffset, 10));
 
       this.hourInterval = setInterval( function() {
 
