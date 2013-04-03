@@ -49,12 +49,27 @@ JQTWEET = {
 
             if (JQTWEET.search) data = data.statuses;
 
-            var text, name, img;           
+            var text, name, img;   
+
+            // test time
+
+            console.log(data)
+
+
+
+            
 
             // try {
 
                   // append tweets into page
                   for (var i = 0; i < JQTWEET.numTweets; i++) {   
+var now = new Date();
+ var nowWrapper = moment(now);                  
+ var pastDateWrapper = moment(data[i].created_at);
+ var displayDate = pastDateWrapper.from(nowWrapper);
+ console.log(displayDate) // displays humanized time difference between now and pastDate
+
+                    var time = moment(data[i].created_at).format("MM-DD-YYYY");
 
                     img = '';
                     url = 'http://twitter.com/' + data[i].user.screen_name + '/status/' + data[i].id_str;
@@ -66,7 +81,7 @@ JQTWEET = {
                       //no media
                     }
 
-                    $(JQTWEET.appendTo).html( JQTWEET.template.replace('{TEXT}', JQTWEET.ify.clean(data[i].text) ).replace('{USER}', data[i].user.screen_name).replace('{IMG}', img).replace('{AGO}', JQTWEET.timeAgo(data[i].created_at) ).replace('{URL}', url ));
+                    $(JQTWEET.appendTo).html( JQTWEET.template.replace('{TEXT}', JQTWEET.ify.clean(data[i].text) ).replace('{USER}', data[i].user.screen_name).replace('{IMG}', img).replace('{AGO}', time ).replace('{URL}', url ));
 
                   
                   }
