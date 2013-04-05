@@ -1,4 +1,4 @@
-<?
+<?php
 //We use already made Twitter OAuth library
 //https://github.com/mynetx/codebird-php
 require_once ('codebird.php');

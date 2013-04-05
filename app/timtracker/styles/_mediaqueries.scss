@@ -8,9 +8,14 @@
 		a {
 			bottom: -106px;
 		}
+		#messages {
+			div {
+				margin: 0 10px;
+			}
+		}
 	}
 
-	.open {
+	.open, .man {
 		display: none;
 	}
 
@@ -22,12 +27,16 @@
 	}
 
 	#map_canvas {
-		min-height: auto;
-		height: 290px !important;
+		min-height: 320px;
+		height: 320px !important;
 		position: relative;
 	}
 
 	.left-col {
+
+		.twitter {
+			clear: both;
+		}
 
 		.jg-logo {
 			display: none;

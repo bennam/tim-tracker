@@ -12,6 +12,7 @@ var app =  app || {};
     currentPositionMarker: null,
     locations: [],
     hourInterval: null,
+    minuteInterval: null,
     messageInterval: null,
     overlay: null,
     spotUrl: 'https://api.findmespot.com/spot-main-web/consumer/rest-api/2.0/public/feed/0JQ8uiQGUq96qSapP3CixZnP00iH66CDb/',
@@ -21,6 +22,7 @@ var app =  app || {};
       this.loadMap();
       this.getJustGivingInformation();
       this.latestTweet();
+      this.logLastUpdate();
 
       // Interval of 300000 = 5 mins.
       this.updateAll(300000);
@@ -140,8 +142,7 @@ var app =  app || {};
 
     getLocalTime: function (latLng) {
 
-      var ts = Math.round((new Date()).getTime() / 1000),
-          that = this,
+      var that = this,
           url = 'http://api.geonames.org/timezoneJSON?formatted=true&lat=' + latLng.lat() + '&lng=' + latLng.lng() + '&username=bennam&style=full';
 
       $.ajax({
@@ -152,7 +153,7 @@ var app =  app || {};
 
         success: function(json) {
 
-          that.displayLocalTime(json.rawOffset);
+          that.displayLocalTime(json.time);
 
         },
 
@@ -165,22 +166,53 @@ var app =  app || {};
 
     },
 
-    displayLocalTime: function (rawOffset) {
+    goTo: function (place) {
 
-      var offset = Math.floor(parseInt(rawOffset, 10));
+      var t;
+
+      switch (place) {
+
+        case 'adelaide':
+          t = [-34.928621,138.599959];
+        break;
+        case 'rome':
+          t = [41.892438,12.481499];
+        break;
+        case 'moscow':
+          t = [55.749646,37.62368];
+        break;
+        case 'newyork':
+          t = [40.714353,-74.005973];
+        break;
+
+        // Ouarzazate, Morocco.
+        default:
+          t = [30.91987,-6.893539];
+        break;
+      }
+
+      this.updateMap(new google.maps.LatLng(t[0],t[1]));
+
+    },
+
+    displayLocalTime: function (time) {
+
+      var localHour = moment(time).hour();
+      var hourOffset = localHour - new Date().getHours();
+
+      var localMinute = moment(time).minute();
+      var minuteOffset = localMinute - new Date().getMinutes();
+
+      clearInterval(this.hourInterval);
+      clearInterval(this.minuteInterval);
 
       this.hourInterval = setInterval( function() {
-
-        var currentTime = new Date();
-        currentTime.setHours(currentTime.getHours() + offset);
-        var hours = currentTime.getHours();
-
+        var hours = new Date().getHours() + parseInt(hourOffset,10);
         $("#hours").html(( hours < 10 ? "0" : "" ) + hours);
+      },1000);
 
-      }, 1000);
-
-      setInterval( function() {
-        var minutes = new Date().getMinutes();
+      this.minuteInterval = setInterval( function() {
+        var minutes = new Date().getMinutes() + parseInt(minuteOffset,10);
         $("#min").html(( minutes < 10 ? "0" : "" ) + minutes);
       },1000);
 
@@ -217,8 +249,6 @@ var app =  app || {};
       this.getLocations();
 
     },
-
-
 
     getLocations: function () {
 
@@ -405,20 +435,15 @@ var app =  app || {};
 
     logLastUpdate: function () {
 
-      var currentdate = new Date(); 
+      var lastUpdate = "Position updated: " + moment().format('HH:mm:ss MMMM Do');
 
-      var lastUpdate = "Position updated: " + currentdate.getDate() + "/" + (currentdate.getMonth() + 1)  + "/" + currentdate.getFullYear() + " @ " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-
-      return lastUpdate;
+      return console.log(lastUpdate);
 
     },
     
     updateMap: function (latLng) {
 
-      var that = this;
-
       this.locations.unshift(latLng);
-
       this.drawPath(this.locations, '#ed1a3a');
 
       // Remove overlay if exists.
@@ -434,10 +459,9 @@ var app =  app || {};
       this.showTotalDistance(this.route);
 
       // Update clock.
-      clearInterval(this.hourInterval);
       this.getLocalTime(latLng);
 
-      console.log(that.logLastUpdate());
+      this.logLastUpdate();
 
     }
 
