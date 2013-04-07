@@ -231,7 +231,7 @@ var app =  app || {};
     loadMap: function () {
 
       var mapOptions = {
-        zoom: 19,
+        zoom: 13,
         mapTypeId: google.maps.MapTypeId.TERRAIN,
         panControlOptions: {
             position: google.maps.ControlPosition.RIGHT_TOP

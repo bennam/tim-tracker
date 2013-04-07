@@ -85,7 +85,7 @@ module.exports = function (grunt) {
         },
         open: {
             server: {
-                path: 'http://localhost:<%= connect.options.port %>/timtracker.html'
+                path: 'http://localhost:<%= connect.options.port %>/index.html'
             }
         },
         clean: {
@@ -165,7 +165,7 @@ module.exports = function (grunt) {
             }
         },
         useminPrepare: {
-            html: '<%= yeoman.app %>/timtracker.html',
+            html: '<%= yeoman.app %>/index.html',
             options: {
                 dest: '<%= yeoman.dist %>'
             }
