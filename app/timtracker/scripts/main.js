@@ -273,6 +273,9 @@ var app =  app || {};
           that.showTotalDistance(that.route);
           that.addMarker(that.locations[that.locations.length - 1],'start-icon.png');
 
+          // Stage 2 marker.
+          that.addMarker(new google.maps.LatLng(30.94726,-4.33621),'stage-2-icon.png');
+
         }
 
       });

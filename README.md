@@ -1,20 +1,6 @@
 tim-tracker
 ===========
 
-
-// TODO:
-
-
-
-// browser testing
-
-
-// Testing
-
-
-
-// Klm feed
-
-// Performance
-
-// Responsive
+* add stage information
+LAT/LNG
+30.94726	-4.33621
