@@ -250,7 +250,7 @@ var app =  app || {};
 
     },
 
-    getLocations: function () {
+    getLocations: function (offSet) {
 
       var that = this;
 
@@ -260,6 +260,14 @@ var app =  app || {};
         dataType: 'jsonp',
 
         success: function(json) {
+
+          if (json.count > 50) {
+            completedFunction();
+          }
+
+          else {
+            that.getLocations(offSet+50);
+          }
 
           $.each(json.response.feedMessageResponse.messages.message, function (i, item) {
               that.locations.push(new google.maps.LatLng(item.latitude, item.longitude));
