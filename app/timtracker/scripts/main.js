@@ -250,43 +250,55 @@ var app =  app || {};
 
     },
 
-    getLocations: function (offSet) {
+    getLocations: function (start) {
 
       var that = this;
 
+      if (start === undefined) { 
+        start = 0;
+      }
+
       $.ajax({
         type: 'GET',
-        url: this.spotUrl + 'message.json',
+        url: this.spotUrl + 'message.json?start=' + start,
         dataType: 'jsonp',
 
         success: function(json) {
 
-          if (json.count > 50) {
-            completedFunction();
-          }
-
-          else {
-            that.getLocations(offSet+50);
-          }
+          var count = json.response.feedMessageResponse.count;
 
           $.each(json.response.feedMessageResponse.messages.message, function (i, item) {
-              that.locations.push(new google.maps.LatLng(item.latitude, item.longitude));
-
+            that.locations.push(new google.maps.LatLng(item.latitude, item.longitude));
           });
-  
-          that.drawPath(that.locations, '#ed1a3a');
-          that.map.setCenter(that.locations[0]);
-          that.addCustomMarkerAnimation(that.locations[0]);
-          that.getLocalTime(that.locations[0]);
-          that.showTotalDistance(that.route);
-          that.addMarker(that.locations[that.locations.length - 1],'start-icon.png');
+          
+          if (count === 50) {
 
-          // Stage 2 marker.
-          that.addMarker(new google.maps.LatLng(30.94726,-4.33621),'stage-2-icon.png');
+            that.getLocations(start + 49);
+
+          } else {
+
+            that.drawLocations(that.locations);
+
+          }
 
         }
 
       });
+
+    },
+
+    drawLocations: function (locations) {
+
+      this.drawPath(locations, '#ed1a3a');
+      this.map.setCenter(locations[0]);
+      this.addCustomMarkerAnimation(locations[0]);
+      this.getLocalTime(locations[0]);
+      this.showTotalDistance(this.route);
+
+      // Markers.
+      this.addMarker(locations[locations.length - 1],'start-icon.png');
+      this.addMarker(new google.maps.LatLng(30.94726,-4.33621),'stage-2-icon.png');
+      this.addMarker(new google.maps.LatLng(30.84978,-4.57175),'stage-3-icon.png');
 
     },
 
