@@ -254,7 +254,7 @@ var app =  app || {};
 
       var that = this;
 
-      start = start || 0;
+      var start = start || 0;
 
       $.ajax({
         type: 'GET',
@@ -301,6 +301,7 @@ var app =  app || {};
       this.addMarker(locations[locations.length - 1],'start-icon.png');
       this.addMarker(new google.maps.LatLng(30.94726,-4.33621),'stage-2-icon.png');
       this.addMarker(new google.maps.LatLng(30.84978,-4.57175),'stage-3-icon.png');
+      this.addMarker(new google.maps.LatLng(30.634,-4.74017),'stage-4-icon.png');
 
     },
 
