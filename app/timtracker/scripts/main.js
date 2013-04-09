@@ -200,8 +200,8 @@ var app =  app || {};
       var localHour = moment(time).hour();
       var hourOffset = localHour - new Date().getHours();
 
-      var localMinute = moment(time).minute();
-      var minuteOffset = localMinute - new Date().getMinutes();
+      // var localMinute = moment(time).minute();
+      // var minuteOffset = localMinute - new Date().getMinutes();
 
       clearInterval(this.hourInterval);
       clearInterval(this.minuteInterval);
@@ -212,7 +212,7 @@ var app =  app || {};
       },1000);
 
       this.minuteInterval = setInterval( function() {
-        var minutes = new Date().getMinutes() + parseInt(minuteOffset,10);
+        var minutes = new Date().getMinutes();
         $("#min").html(( minutes < 10 ? "0" : "" ) + minutes);
       },1000);
 
@@ -232,7 +232,7 @@ var app =  app || {};
 
       var mapOptions = {
         zoom: 13,
-        mapTypeId: google.maps.MapTypeId.TERRAIN,
+        mapTypeId: google.maps.MapTypeId.SATELLITE,
         panControlOptions: {
             position: google.maps.ControlPosition.RIGHT_TOP
         },
@@ -254,9 +254,7 @@ var app =  app || {};
 
       var that = this;
 
-      if (start === undefined) { 
-        start = 0;
-      }
+      start = start || 0;
 
       $.ajax({
         type: 'GET',
@@ -265,20 +263,24 @@ var app =  app || {};
 
         success: function(json) {
 
-          var count = json.response.feedMessageResponse.count;
+          var count;
 
-          $.each(json.response.feedMessageResponse.messages.message, function (i, item) {
-            that.locations.push(new google.maps.LatLng(item.latitude, item.longitude));
-          });
-          
-          if (count === 50) {
+          if (!json.response.errors) {
 
-            that.getLocations(start + 49);
+            count = json.response.feedMessageResponse.count;
+
+            $.each(json.response.feedMessageResponse.messages.message, function (i, item) {
+              that.locations.push(new google.maps.LatLng(item.latitude, item.longitude));
+            });
 
           } else {
+            count = 0;
+          }
 
+          if (count < 50) {
             that.drawLocations(that.locations);
-
+          } else {
+            that.getLocations(start + 50);
           }
 
         }
