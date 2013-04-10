@@ -200,9 +200,6 @@ var app =  app || {};
       var localHour = moment(time).hour();
       var hourOffset = localHour - new Date().getHours();
 
-      // var localMinute = moment(time).minute();
-      // var minuteOffset = localMinute - new Date().getMinutes();
-
       clearInterval(this.hourInterval);
       clearInterval(this.minuteInterval);
 
@@ -371,7 +368,6 @@ var app =  app || {};
         this.div_ = null;
       };
       
-
     },
 
     drawPath: function (path,strokeColor) {

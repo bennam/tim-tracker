@@ -1,6 +1,4 @@
-tim-tracker
+Tim Tracker
 ===========
 
-* add stage information
-LAT/LNG
-30.94726	-4.33621
+The [Tim Tracker](http://www.havaslynx.com/timtracker/) shows you live progress of LYNX London General Manager as he runs 5.5 marathons across the Sahara desert for [Marathon de Sables](http://www.marathondessables.co.uk/).
