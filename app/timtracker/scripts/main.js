@@ -6,6 +6,7 @@ var app =  app || {};
 
   app.global = {
 
+    completed: true,
     map: null,
     route: null,
     marker: null,
@@ -253,10 +254,13 @@ var app =  app || {};
 
       var start = start || 0;
 
+      var url = (!this.completed) ? this.spotUrl + 'message.json?start=' + start : 'timtracker/api/data.js';
+      var dataType = (!this.completed) ? 'jsonp' : 'json';
+
       $.ajax({
         type: 'GET',
-        url: this.spotUrl + 'message.json?start=' + start,
-        dataType: 'jsonp',
+        url: url,
+        dataType: dataType,
 
         success: function(json) {
 
@@ -277,7 +281,7 @@ var app =  app || {};
           if (count < 50) {
             that.drawLocations(that.locations);
           } else {
-            that.getLocations(start + 50);
+            that.getLocations(start + 49);
           }
 
         }
@@ -290,7 +294,11 @@ var app =  app || {};
 
       this.drawPath(locations, '#ed1a3a');
       this.map.setCenter(locations[0]);
-      this.addCustomMarkerAnimation(locations[0]);
+
+      if (!this.completed) {
+        this.addCustomMarkerAnimation(locations[0]);
+      }
+      
       this.getLocalTime(locations[0]);
       this.showTotalDistance(this.route);
 
@@ -299,6 +307,8 @@ var app =  app || {};
       this.addMarker(new google.maps.LatLng(30.94726,-4.33621),'stage-2-icon.png');
       this.addMarker(new google.maps.LatLng(30.84978,-4.57175),'stage-3-icon.png');
       this.addMarker(new google.maps.LatLng(30.634,-4.74017),'stage-4-icon.png');
+      this.addMarker(new google.maps.LatLng(30.90455,-4.13327),'stage-5-icon.png');
+      this.addMarker(new google.maps.LatLng(31.08016,-3.93604),'stage-6-icon.png');
 
     },
 
@@ -431,25 +441,31 @@ var app =  app || {};
         that.latestTweet();
 
         // Update map.
-        $.ajax({
-          type: 'GET',
-          url: that.spotUrl + 'latest.json',
-          dataType: 'jsonp',
+        if (!that.completed) {
 
-          success: function(json) {
-            var newLocation = [];
-            $.each(json.response.feedMessageResponse.messages, function (i, item) {
-              newLocation.push(new google.maps.LatLng(item.latitude, item.longitude));
-            });
-            that.updateMap(newLocation[0]);
+          alert('test')
 
-          },
+          $.ajax({
+            type: 'GET',
+            url: that.spotUrl + 'latest.json',
+            dataType: 'jsonp',
 
-          error: function (xhr, err) {  
-            console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);  
-            console.log("responseText: " + xhr.responseText);  
-          }
-        });
+            success: function(json) {
+              var newLocation = [];
+              $.each(json.response.feedMessageResponse.messages, function (i, item) {
+                newLocation.push(new google.maps.LatLng(item.latitude, item.longitude));
+              });
+              that.updateMap(newLocation[0]);
+
+            },
+
+            error: function (xhr, err) {  
+              console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);  
+              console.log("responseText: " + xhr.responseText);  
+            }
+          });
+
+        }
 
       }, interval);
 
