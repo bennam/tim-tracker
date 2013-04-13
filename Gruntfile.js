@@ -228,7 +228,7 @@ module.exports = function (grunt) {
                     src: [
                         '*.{ico,txt}',
                         '.htaccess',
-                        'timtracker/api/*.php',
+                        'timtracker/api/*.{php,js}',
                         '*.html',
                         'timtracker/images/{,*/}*.{webp,gif,ico}'
                     ]

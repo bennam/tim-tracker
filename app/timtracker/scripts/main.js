@@ -229,7 +229,7 @@ var app =  app || {};
     loadMap: function () {
 
       var mapOptions = {
-        zoom: 13,
+        zoom: 11,
         mapTypeId: google.maps.MapTypeId.SATELLITE,
         panControlOptions: {
             position: google.maps.ControlPosition.RIGHT_TOP
@@ -308,7 +308,7 @@ var app =  app || {};
       this.addMarker(new google.maps.LatLng(30.84978,-4.57175),'stage-3-icon.png');
       this.addMarker(new google.maps.LatLng(30.634,-4.74017),'stage-4-icon.png');
       this.addMarker(new google.maps.LatLng(30.90455,-4.13327),'stage-5-icon.png');
-      this.addMarker(new google.maps.LatLng(31.08016,-3.93604),'stage-6-icon.png');
+      this.addMarker(new google.maps.LatLng(31.08016,-3.93604),'finish-icon.png');
 
     },
 
